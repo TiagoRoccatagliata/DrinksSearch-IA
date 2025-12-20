@@ -1,6 +1,6 @@
 import axios from "axios"
-import { CategoriesAPIResponseSchema, DrinksAPIResponse } from "../utils/recipe-schema"
-import type { SearchFilter } from "../types"
+import { CategoriesAPIResponseSchema, DrinksAPIResponse, RecipeAPIResponseSchema } from "../utils/recipe-schema"
+import type { Drink, SearchFilter } from "../types"
 
 
 export async function getCategories() {
@@ -23,9 +23,19 @@ export async function getRecipes(filters: SearchFilter) {
     console.log('API Response:', data)
     const result = DrinksAPIResponse.safeParse(data)
     console.log('Zod validation result:', result)
-    if(result.success) {
+    if (result.success) {
         return result.data
     }
     console.error('Validation failed:', result.error)
     throw new Error('Failed to validate API response')
+}
+
+
+export async function getRecipeById(id: Drink['idDrink']) {
+    const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
+    const { data } = await axios(url)
+    const result = RecipeAPIResponseSchema.safeParse(data.drinks[0])
+    if (result.success) {
+        return result.data
+    }
 }
