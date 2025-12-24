@@ -18,24 +18,27 @@ export default function Header() {
     const fetchCategories = useAppStore((state) => state.fetchCategories)
     const categories = useAppStore((state) => state.categories)
     const searchRecipes = useAppStore((state) => state.searchRecipes)
+    const showNotification = useAppStore((state) => state.showNotification)
 
     useEffect(() => {
         fetchCategories()
-    },[])
+    }, [])
 
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
         setSearchFilters({
             ...searchFilters,
-            [e.target.name] : e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        // TODO: Validar
-        if(Object.values(searchFilters).includes('')) {
-            console.log('Todos los campos son obligatorios')
+        if (Object.values(searchFilters).includes('')) {
+            showNotification({
+                text: 'Todos los campos son obligatorios',
+                error: true
+            })
             return
         }
 
@@ -107,10 +110,10 @@ export default function Header() {
                                 onChange={handleChange}
                                 value={searchFilters.category}
                             >
-                        
+
                                 <option value="">-- Seleccione --</option>
                                 {categories.drinks.map(category => (
-                                    <option 
+                                    <option
                                         value={category.strCategory}
                                         key={category.strCategory}
                                     >
