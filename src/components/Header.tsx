@@ -68,6 +68,14 @@ export default function Header() {
                             }
                             to='/favoritos'>
                             Favoritos
+
+                        </NavLink>
+                        <NavLink
+                            className={({ isActive }) =>
+                                isActive ? 'text-orange-500 uppercase font-bold' : 'text-white uppercase font-bold'
+                            }
+                            to='/ia'>
+                            IA
                         </NavLink>
                     </nav>
                 </div>
